@@ -2,32 +2,42 @@
 
 import type { GameMode } from "@/lib/game-registry";
 
-interface Props {
-  modes: GameMode[];
-  selected: GameMode | null;
-  onSelect: (mode: GameMode) => void;
+interface ModeOption {
+  id: string;
+  label: string;
+  icon: string;
+  desc: string;
 }
 
-const MODE_META: Record<GameMode, { label: string; icon: string; desc: string }> = {
-  local: { label: "Local", icon: "👥", desc: "Play on the same device" },
-  ai: { label: "vs AI", icon: "🤖", desc: "Challenge the computer" },
-  online: { label: "Online", icon: "🌐", desc: "Play with friends online" },
+const DEFAULT_MODE_META: Record<GameMode, ModeOption> = {
+  local: { id: "local", label: "Local", icon: "👥", desc: "Play on the same device" },
+  ai: { id: "ai", label: "vs AI", icon: "🤖", desc: "Challenge the computer" },
+  online: { id: "online", label: "Online", icon: "🌐", desc: "Play with friends online" },
 };
+
+interface Props {
+  modes: (GameMode | ModeOption)[];
+  selected?: string | null;
+  onSelect: (mode: string) => void;
+}
 
 /**
  * Mode selection cards. Displayed before starting a game.
- * Supports local, AI, and online modes.
+ * Accepts either GameMode strings or custom ModeOption objects.
  */
 export function ModeSelector({ modes, selected, onSelect }: Props) {
+  const options: ModeOption[] = modes.map((m) =>
+    typeof m === "string" ? DEFAULT_MODE_META[m] : m
+  );
+
   return (
-    <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(modes.length, 3)}, 1fr)`, gap: 12, width: "100%", maxWidth: 480 }}>
-      {modes.map((mode) => {
-        const meta = MODE_META[mode];
-        const active = selected === mode;
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(options.length, 3)}, 1fr)`, gap: 12, width: "100%", maxWidth: 480 }}>
+      {options.map((opt) => {
+        const active = selected === opt.id;
         return (
           <button
-            key={mode}
-            onClick={() => onSelect(mode)}
+            key={opt.id}
+            onClick={() => onSelect(opt.id)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -42,9 +52,9 @@ export function ModeSelector({ modes, selected, onSelect }: Props) {
               textAlign: "center",
             }}
           >
-            <span style={{ fontSize: 28 }}>{meta.icon}</span>
-            <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-text)" }}>{meta.label}</span>
-            <span style={{ fontSize: 12, color: "var(--color-text-muted)" }}>{meta.desc}</span>
+            <span style={{ fontSize: 28 }}>{opt.icon}</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-text)" }}>{opt.label}</span>
+            <span style={{ fontSize: 12, color: "var(--color-text-muted)" }}>{opt.desc}</span>
           </button>
         );
       })}

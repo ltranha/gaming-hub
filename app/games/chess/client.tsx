@@ -43,7 +43,7 @@ export function ChessClient({ game }: { game: GameConfig }) {
   if (!mode) {
     return (
       <GameShell game={game}>
-        <ModeSelector modes={game.modes} selected={mode} onSelect={(m) => { setMode(m); restart(); }} />
+        <ModeSelector modes={game.modes} selected={mode} onSelect={(m) => { setMode(m as GameMode); restart(); }} />
       </GameShell>
     );
   }

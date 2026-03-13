@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { GameConfig } from "@/lib/game-registry";
+import { GameRules } from "./game-rules";
 
 interface Props {
   game: GameConfig;
@@ -12,7 +13,8 @@ interface Props {
 
 /**
  * Shared game shell wrapper.
- * Provides consistent header (back + title), status bar, and content area.
+ * Provides consistent header (back + title), status bar, content area,
+ * and collapsible rules/how-to-play section at the bottom.
  * Used by every game page for uniform navigation and layout.
  */
 export function GameShell({ game, children, status, onRestart }: Props) {
@@ -85,6 +87,9 @@ export function GameShell({ game, children, status, onRestart }: Props) {
       <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {children}
       </div>
+
+      {/* Rules (collapsible, at the bottom of every game) */}
+      <GameRules slug={game.slug} />
     </div>
   );
 }
