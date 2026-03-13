@@ -1,0 +1,47 @@
+---
+description: Styling and layout rules for games-hub
+globs: ["**/*.tsx"]
+---
+
+# Styling Approach
+
+This project uses **inline styles only** — no Tailwind, no CSS modules, no styled-components.
+
+## Why
+
+CSS framework classes (Tailwind v4 in particular) caused persistent centering and layout issues
+that were only resolved by switching to explicit inline CSS. Inline styles give direct,
+predictable control over layout with zero build-tool ambiguity.
+
+## Rules
+
+1. **All layout uses `style` attributes** — flexbox, grid, margin, padding, maxWidth
+2. **Design tokens via CSS variables** — `var(--color-primary)`, `var(--color-surface)`, etc.
+   defined in `app/globals.css` under `:root`
+3. **Centering pattern** — `marginLeft: "auto", marginRight: "auto"` with explicit `maxWidth`
+4. **Reusable styles** — extract as `React.CSSProperties` constants at the top of the file
+5. **No className on JSX** — all styling is inline `style={{ ... }}`
+6. **Responsive** — use `maxWidth` with percentage fallbacks rather than media queries where possible
+
+## Layout Constants
+
+| Element       | maxWidth | Notes                       |
+|---------------|----------|-----------------------------|
+| Root layout   | 960px    | Main content container      |
+| Navbar        | 960px    | Aligns with content          |
+| GameShell     | 600px    | Individual game pages        |
+| Search bar    | 420px    | Hub search input             |
+| Card grid     | 100%     | Auto-fill columns, centered |
+
+## Design Tokens
+
+All colors, border-radii, and fonts are defined as CSS custom properties in `globals.css`.
+Reference them in inline styles as `var(--color-*)`, `var(--radius-*)`, `var(--font-*)`.
+
+## Adding New Components
+
+When creating a new page or component:
+1. Use inline `style` for all layout and visual properties
+2. Reference design tokens for colors, borders, and radii
+3. If a style object is used more than twice, extract it as a `React.CSSProperties` constant
+4. Wrap game pages in `<GameShell>` for consistent centering and navigation

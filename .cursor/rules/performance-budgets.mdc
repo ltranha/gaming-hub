@@ -1,0 +1,34 @@
+---
+description: Performance budgets and scaling notes for games-hub
+globs: ["**/*.ts", "**/*.tsx"]
+---
+
+## Budgets
+
+- Target: < 100KB JS per page (excluding Next.js framework shared chunk)
+- First meaningful paint: < 2s on 3G
+- All pages should be statically prerenderable
+- No external API calls at build time
+- Lazy load heavy game components if needed
+- Interaction lag: < 50ms for game moves
+
+## How Loading Works
+
+Next.js **code-splits** each route into its own JS chunk. Adding more games does NOT
+increase the load time of any individual page:
+
+- The hub page loads only `game-grid.tsx` + `hero-section.tsx` + game metadata (no game logic)
+- Each game page loads only its own `client.tsx` and `lib/games/<slug>.ts`
+- Static prerendering means pages are served as HTML + minimal JS hydration
+- The shared chunk (React + Next.js runtime, ~102KB) is loaded once and cached
+
+## Scaling to 50+ Games
+
+- **Hub page**: Game registry metadata is tiny (~200 bytes per game). Even 100 games
+  would add < 20KB to the hub bundle. The grid uses CSS auto-fill for layout.
+- **Images**: Use Next.js `<Image>` with `loading="lazy"` for game icons/thumbnails.
+  Keep icons as SVG (< 5KB each) or optimized PNG.
+- **New game bundles**: Each new game is isolated. A complex game with heavy logic
+  (e.g., chess AI) doesn't affect other games' load times.
+- **Deployment**: Vercel and Cloudflare Pages handle static sites with CDN caching.
+  Adding pages doesn't increase hosting costs on free tiers.

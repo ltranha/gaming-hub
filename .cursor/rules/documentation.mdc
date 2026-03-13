@@ -1,0 +1,10 @@
+---
+description: Documentation requirements for games-hub
+globs: ["**/*.md"]
+---
+
+- Maintain full markdown pack: README, CONTEXT, DEPLOY, CONTRIBUTING, ROADMAP, TODO, FUTURE_WORK
+- Update CONTEXT.md after every significant change
+- Keep TODO.md aligned with actual implementation state
+- Use mermaid diagrams for architecture where helpful
+- Every game must be documented in CONTEXT.md with status

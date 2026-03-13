@@ -1,0 +1,15 @@
+---
+description: Global code conventions for games-hub
+globs: ["**/*.ts", "**/*.tsx"]
+---
+
+- Use TypeScript for all files
+- Game logic in `lib/games/` must be pure functions with immutable state
+- Client components use `"use client"` directive
+- Shared game UI uses `GameShell` wrapper for consistent header, nav, and centering
+- Game config changes go in `lib/game-registry.ts`
+- No `console.log` in production code
+- Use CSS custom properties (design tokens) from `globals.css` for all colors and theming
+- All layout and styling uses inline `style` attributes — no CSS framework classes
+- Extract shared style objects as top-level `React.CSSProperties` constants when reused
+- JSDoc comments on all exported functions and module-level descriptions

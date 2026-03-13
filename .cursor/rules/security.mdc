@@ -1,0 +1,10 @@
+---
+description: Security rules for games-hub
+globs: ["**/*.ts", "**/*.tsx"]
+---
+
+- Never commit `.env.local` or any file with real API keys
+- Firebase config is public (security via Firestore rules), but API keys still go in env vars
+- Admin panel must require authentication before showing data
+- Sanitize all user input before rendering (game names, clues, etc.)
+- Use `NEXT_PUBLIC_` prefix only for client-safe values
